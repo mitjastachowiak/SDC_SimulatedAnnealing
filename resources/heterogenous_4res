@@ -1,0 +1,12 @@
+/////////////////////////////////////////////////////////
+// Resource Constraints                                //
+// Listing all available resources                     //
+/////////////////////////////////////////////////////////
+// Usage: 
+// ResNameNum 	Operation1 Operation2     ...
+// Available operations are ADD, SUB, DIV, MULT, SH, AND, OR, MEM, CMP, OTHER
+
+RES00		OTHER ADD SUB DIV MULT SH AND OR CMP MEM
+RES01		ADD SUB SH AND OR CMP MEM
+RES02		SH AND OR CMP MEM
+RES03		ADD SUB MEM

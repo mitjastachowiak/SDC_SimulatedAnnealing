@@ -1,0 +1,8 @@
+digraph depgraph {
+n0 [label="747:IADD"];
+n1 [label="739:IFGE"];
+n0 -> n1 [constraint=false,color=blue,label="1"];
+n2 [label="746:DMA_STORE"];
+n0 -> n2 [constraint=false,color=blue,label="1"];
+n0 -> n0 [constraint=false,color=blue,label="1"];
+}

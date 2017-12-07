@@ -1,0 +1,79 @@
+digraph depgraph {
+
+node [shape=box];
+
+d23 [label="d23 (Ss:7) - 46:IMUL",shape=box];
+d23 -> d25;
+
+d10 [label="d10 (Ss:3) - 30:IADD",shape=box];
+d10 -> d11;
+
+d32 [label="d32 (Ss:3) - 58:IADD",shape=box];
+d32 -> d33;
+
+d11 [label="d11 (WL:1) - 31:ISTORE_1",shape=box];
+d11 -> d35;
+
+d33 [label="d33 (WL:6) - 59:ISTORE",shape=box];
+d33 -> d37;
+
+d15 [label="d15 (Ss:2) - 36:IMUL",shape=box];
+d15 -> d17;
+
+d35 [label="d35 (WL:2) - 62:ISTORE_2",shape=box];
+d35 -> d35[color=red , label="1"];
+d35 -> d10[color=red , label="1"];
+d35 -> d7[color=red , label="1"];
+d35 -> d15[color=red , label="1"];
+
+d17 [label="d17 (Ss:5) - 39:IMUL",shape=box];
+d17 -> d19;
+
+d27 [label="d27 (WL:4) - 50:ISTORE",shape=box];
+d27 -> d39;
+
+d25 [label="d25 (Ss:3) - 48:IMUL",shape=box];
+d25 -> d26;
+
+d39 [label="d39 (WL:5) - 69:ISTORE",shape=box];
+d39 -> d17[color=red , label="1"];
+d39 -> d39[color=red , label="1"];
+d39 -> d20[color=red , label="1"];
+d39 -> d31[color=red , label="1"];
+
+d37 [label="d37 (WL:7) - 65:ISTORE",shape=box];
+d37 -> d23[color=red , label="1"];
+d37 -> d32[color=red , label="1"];
+d37 -> d37[color=red , label="1"];
+
+d26 [label="d26 (Ss:3) - 49:ISUB",shape=box];
+d26 -> d27;
+
+d19 [label="d19 (Ss:3) - 41:IMUL",shape=box];
+d19 -> d20;
+
+d7 [label="d7 (Wk:2) - 25:IF_ICMPGE",shape=box];
+d7 -> d23;
+d7 -> d10;
+d7 -> d32;
+d7 -> d11;
+d7 -> d33;
+d7 -> d15;
+d7 -> d35;
+d7 -> d17;
+d7 -> d27;
+d7 -> d25;
+d7 -> d39;
+d7 -> d37;
+d7 -> d26;
+d7 -> d19;
+d7 -> d31;
+d7 -> d20;
+
+d31 [label="d31 (Ss:3) - 57:IMUL",shape=box];
+d31 -> d32;
+
+d20 [label="d20 (Ss:3) - 42:ISUB",shape=box];
+d20 -> d26;
+
+}

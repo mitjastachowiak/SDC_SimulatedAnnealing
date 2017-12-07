@@ -1,0 +1,29 @@
+digraph depgraph {
+n0 [label="465:ISHL"];
+n1 [label="455:IAND"];
+n1 -> n0;
+n2 [label="464:IMUL"];
+n2 -> n0;
+n3 [label="466:IOR"];
+n0 -> n3;
+n4 [label="442:DMA_STORE"];
+n5 [label="441:DMA_LOAD"];
+n5 -> n4;
+n5 -> n1;
+n6 [label="461:ISUB"];
+n7 [label="459:ISUB"];
+n7 -> n6;
+n6 -> n2;
+n8 [label="469:IADD"];
+n8 -> n7 [constraint=false,color=blue,label="1"];
+n8 -> n8 [constraint=false,color=blue,label="1"];
+n9 [label="428:IFGE"];
+n8 -> n9 [constraint=false,color=blue,label="1"];
+n3 -> n3 [constraint=false,color=blue,label="1"];
+n10 [label="448:IADD"];
+n10 -> n5 [constraint=false,color=blue,label="1"];
+n10 -> n10 [constraint=false,color=blue,label="1"];
+n11 [label="435:IADD"];
+n11 -> n11 [constraint=false,color=blue,label="1"];
+n11 -> n4 [constraint=false,color=blue,label="1"];
+}

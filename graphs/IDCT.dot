@@ -1,0 +1,59 @@
+digraph depgraph {
+
+d15 [label="d15 (Ss:5) - 46:IADD",shape=box];
+d15 -> d16;
+
+d21 [label="d21 (Ss:8) - 55:IMUL",shape=box];
+d21 -> d23;
+
+d26 [label="d26 (Ss:4) - 61:IADD",shape=box];
+d26 -> d27;
+
+d13 [label="d13 (Ss:8) - 43:IMUL",shape=box];
+d13 -> d15;
+
+d30 [label="d30 (WL:5) - 64:IINC",shape=box];
+d30 -> d15[color=red , label="1"];
+d30 -> d7[color=red , label="1"];
+d30 -> d30[color=red , label="1"];
+d30 -> d23[color=red , label="1"];
+
+d24 [label="d24 (RO:4) - 59:IALOAD",shape=box];
+d24 -> d25;
+
+d16 [label="d16 (RO:1) - 47:IALOAD",shape=box];
+d16 -> d25;
+
+d23 [label="d23 (Ss:5) - 58:IADD",shape=box];
+d23 -> d24;
+
+d25 [label="d25 (Ss:4) - 60:IMUL",shape=box];
+d25 -> d26;
+
+node [shape=box];
+
+d7 [label="d7 (Wk:5) - 31:IF_ICMPGE",shape=box];
+d7 -> d15;
+d7 -> d21;
+d7 -> d26;
+d7 -> d18;
+d7 -> d13;
+d7 -> d30;
+d7 -> d10;
+d7 -> d24;
+d7 -> d27;
+d7 -> d16;
+d7 -> d23;
+d7 -> d25;
+
+d18 [label="d18 (RO:4) - 49:GETFIELD_ARRAY",shape=box];
+d18 -> d24;
+
+d27 [label="d27 (WL:4) - 62:ISTORE",shape=box];
+d27 -> d26[color=red , label="1"];
+d27 -> d27[color=red , label="1"];
+
+d10 [label="d10 (RO:1) - 37:GETFIELD_ARRAY",shape=box];
+d10 -> d16;
+
+}

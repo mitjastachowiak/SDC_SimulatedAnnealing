@@ -1,0 +1,10 @@
+digraph{
+N1_MUL -> N3_MUL;
+N2_MUL -> N3_MUL;
+N3_MUL -> N4_SUB;
+N4_SUB -> N5_SUB;
+N6_MUL -> N7_MUL;
+N7_MUL -> N5_SUB;
+N8_MUL -> N9_ADD;
+N10_ADD -> N11_CMP;
+}

@@ -1,0 +1,108 @@
+digraph depgraph {
+
+d51 [label="d51 (Ss:24) - 99:ISHL",shape=box];
+d51 -> d52;
+
+d52 [label="d52 (Ss:24) - 100:IOR",shape=box];
+d52 -> d53;
+
+d29 [label="d29 (RO:1) - 68:BALOAD",shape=box];
+d29 -> d31;
+d29 -> d39;
+
+d39 [label="d39 (RO:1) - 82:BALOAD",shape=box];
+d39 -> d49;
+d39 -> d41;
+
+d13 [label="d13 (Ss:2) - 47:ISHR",shape=box];
+d13 -> d15;
+
+d28 [label="d28 (Ss:1) - 67:IADD",shape=box];
+d28 -> d29;
+
+d15 [label="d15 (Ss:4) - 49:IMUL",shape=box];
+d15 -> d19;
+
+d18 [label="d18 (Ss:3) - 53:IAND",shape=box];
+d18 -> d19;
+
+d59 [label="d59 (WL:4) - 105:IINC",shape=box];
+d59 -> d13 [color=red , label="1"];
+d59 -> d18 [color=red , label="1"];
+d59 -> d59 [color=red , label="1"];
+
+d38 [label="d38 (Ss:2) - 81:IADD",shape=box];
+d38 -> d39;
+
+d34 [label="d34 (Ss:8) - 76:IOR",shape=box];
+d34 -> d44;
+
+d31 [label="d31 (Ss:255) - 72:IAND",shape=box];
+d31 -> d33;
+
+d43 [label="d43 (Ss:16) - 89:ISHL",shape=box];
+d43 -> d44;
+
+d48 [label="d48 (Ss:3) - 95:IADD",shape=box];
+d48 -> d49;
+
+d24 [label="d24 (Ss:255) - 62:IAND",shape=box];
+d24 -> d34;
+
+d19 [label="d19 (Ss:3) - 54:IADD",shape=box];
+d19 -> d53;
+
+d53 [label="d53 (WO:5) - 101:IASTORE",shape=box];
+
+d56 [label="d56 (WL:6) - 102:IINC",shape=box];
+d56 -> d38[color=red , label="1"];
+d56 -> d9[color=red , label="1"];
+d56 -> d48[color=red , label="1"];
+d56 -> d56[color=red , label="1"];
+d56 -> d22[color=red , label="1"];
+d56 -> d28[color=red , label="1"];
+
+d22 [label="d22 (RO:1) - 58:BALOAD",shape=box];
+d22 -> d29;
+d22 -> d24;
+
+d49 [label="d49 (RO:1) - 96:BALOAD",shape=box];
+d49 -> d51;
+
+d9 [label="d9 (Wk:6) - 39:IF_ICMPGE",shape=box];
+d9 -> d51;
+d9 -> d52;
+d9 -> d19;
+d9 -> d29;
+d9 -> d53;
+d9 -> d39;
+d9 -> d56;
+d9 -> d13;
+d9 -> d22;
+d9 -> d28;
+d9 -> d15;
+d9 -> d18;
+d9 -> d59;
+d9 -> d49;
+d9 -> d38;
+d9 -> d34;
+d9 -> d31;
+d9 -> d43;
+d9 -> d48;
+d9 -> d41;
+d9 -> d33;
+d9 -> d24;
+d9 -> d44;
+
+d41 [label="d41 (Ss:255) - 86:IAND",shape=box];
+d41 -> d43;
+
+d33 [label="d33 (Ss:8) - 75:ISHL",shape=box];
+d33 -> d34;
+
+node [shape=box];
+
+d44 [label="d44 (Ss:16) - 90:IOR",shape=box];
+d44 -> d52;
+
+}

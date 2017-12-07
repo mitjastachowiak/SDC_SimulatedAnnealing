@@ -1,0 +1,21 @@
+digraph depgraph {
+n0 [label="35:IFEQ"];
+n1 [label="21:ISHR"];
+n1 -> n0;
+n2 [label="29:IADD"];
+n3 [label="25:DMA_LOAD"];
+n3 -> n2;
+n4 [label="30:DMA_STORE"];
+n2 -> n4;
+n5 [label="48:IADD"];
+n4 -> n5;
+n6 [label="49:DMA_STORE"];
+n5 -> n6;
+n7 [label="40:ISHR"];
+n1 -> n7;
+n8 [label="16:IFEQ"];
+n1 -> n8 [constraint=false,color=blue,label="1"];
+n1 -> n1 [constraint=false,color=blue,label="1"];
+n7 -> n8 [constraint=false,color=blue,label="1"];
+n7 -> n1 [constraint=false,color=blue,label="1"];
+}

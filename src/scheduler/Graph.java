@@ -71,22 +71,6 @@ public class Graph implements Iterable<Node> {
 			n.reset();
 	}
 	
-	/*public Graph clone() {
-		Graph newg = new Graph();
-		Map<Node, Node> old_new = new HashMap();
-		for (Node nd : nodes.keySet()) {
-			Node newd = new Node(nd.id);
-			old_new.put(nd, newd);
-			newg.add(newd);
-		}
-		
-		for (Node nd : old_new.keySet())
-			for (Node su : nd.successors())
-				newg.link(old_new.get(nd), old_new.get(su));
-		return newg;
-	}
-	*/
-	
 	public Integer dijkstra(Node src) {
 		HashMap<Node,Integer> dist = new HashMap<Node, Integer>();
 		HashMap<Node, Node> prev = new HashMap<Node, Node>();

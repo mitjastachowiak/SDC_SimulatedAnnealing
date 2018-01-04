@@ -20,20 +20,22 @@ public class Main {
 		}
 		
 		Graph g = dr.parse(args[0]);
-		System.out.printf("%s%n", g.diagnose());
-		
-		Scheduler s = new ASAP();
-		Schedule sched = s.schedule(g);
-		System.out.printf("%nASAP%n%s%n", sched.diagnose());
-		System.out.printf("cost = %s%n", sched.cost());
-		
-		sched.draw("schedules/ASAP_" + args[0].substring(args[0].lastIndexOf("/")+1));
-		
-		s = new ALAP();
-		sched = s.schedule(g);
-		System.out.printf("%nALAP%n%s%n", sched.diagnose());
-		System.out.printf("cost = %s%n", sched.cost());
-		
-		sched.draw("schedules/ALAP_" + args[0].substring(args[0].lastIndexOf("/")+1));
+		Scheduler s = new SASDC();
+		s.schedule(g);
+//		System.out.printf("%s%n", g.diagnose());
+//		
+//		Scheduler s = new ASAP();
+//		Schedule sched = s.schedule(g);
+//		System.out.printf("%nASAP%n%s%n", sched.diagnose());
+//		System.out.printf("cost = %s%n", sched.cost());
+//		
+//		sched.draw("schedules/ASAP_" + args[0].substring(args[0].lastIndexOf("/")+1));
+//		
+//		s = new ALAP();
+//		sched = s.schedule(g);
+//		System.out.printf("%nALAP%n%s%n", sched.diagnose());
+//		System.out.printf("cost = %s%n", sched.cost());
+//		
+//		sched.draw("schedules/ALAP_" + args[0].substring(args[0].lastIndexOf("/")+1));
 	}
 }

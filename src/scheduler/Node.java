@@ -38,7 +38,7 @@ public class Node {
 	 * The depth of the node (i.e. 0 is root, ...)
 	 */
 	private int depth = -1;
-
+	
 	/**
 	 * @param id - ID of the new node
 	 * @param rt - resource type
@@ -326,7 +326,7 @@ public class Node {
 		}
 		return depth;
 	}
-
+	
 	/**
 	 * Checks whether this is a (long-distance) predecessor of the specified node.
 	 * 
@@ -338,19 +338,8 @@ public class Node {
 			return true;
 		else
 			for (Node n : this.successors.keySet())
-				if (n.isPredecessorOf(n))
+				if (n.isPredecessorOf(node))
 					return true;
 		return false;
-	}
-
-	/**
-	 * Checks whether there exists a dataflow dependency between this and a given
-	 * node (i.e. this is successor or predecessor of node).
-	 * 
-	 * @param node The node to check.
-	 * @return True if there is a dataflow dependency.
-	 */
-	public boolean hasFlowDependency(Node node) {
-		return this.isPredecessorOf(node) || node.isPredecessorOf(this);
 	}
 }

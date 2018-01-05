@@ -19,7 +19,7 @@ import scheduler.RT;
  */
 public class SDCNodeList {
 	public final int length;
-	private int iSwap1, iSwap2;
+	private int shovePos, shoveCnt; // cnt +/- => left/right
 	private boolean temporary = false;
 	private HashMap<RT, Set<RT>> rtSet; // maps types to a resource (which could contain more types).
 	private HashMap<RT, Integer> rtCount; // the number of resources compatible with certain type.
@@ -35,6 +35,20 @@ public class SDCNodeList {
 			ordered.add(node);
 		ordered.sort((n1, n2) -> n1.getDepth() - n2.getDepth());
 		ordered.toArray(list);
+		
+//		Node[] tmp = new Node[length];
+//		tmp[0] = list[2];
+//		tmp[1] = list[10];
+//		tmp[2] = list[4];
+//		tmp[3] = list[8];
+//		tmp[4] = list[0];
+//		tmp[5] = list[9];
+//		tmp[6] = list[3];
+//		tmp[7] = list[6];
+//		tmp[8] = list[4];
+//		tmp[9] = list[7];
+//		tmp[10] = list[5];
+//		list = tmp;
 	}
 
 	/**
@@ -81,30 +95,70 @@ public class SDCNodeList {
 		list[i1] = list[i2];
 		list[i2] = tmp;
 	}
+	//
+	// /**
+	// * Swaps the two nodes at the given indices in the list and marks the list as
+	// * temporary.
+	// *
+	// * @param i1 The index of the one node.
+	// * @param i2 The index of the other node.
+	// * @return True if the nodes are swapped, false if a swap is not possible (due
+	// * to a dataflow dependency).
+	// */
+	// public boolean swapNodes(int i1, int i2) {
+	// if (list[i1].hasFlowDependency(list[i2]))
+	// return false;
+	// if (temporary)
+	// throw new RuntimeException("Cannot swap nodes - the last swap neither has
+	// been accepted nor reverted.");
+	// swap(iSwap1 = i1, iSwap2 = i2);
+	// return temporary = true;
+	// }
 
 	/**
-	 * Swaps the two nodes at the given indices in the list and marks the list as
-	 * temporary.
+	 * Shoves the node at the specified index to the right (i.e. down).
 	 * 
-	 * @param i1 The index of the one node.
-	 * @param i2 The index of the other node.
-	 * @param force true to ignore flow dependencies or the possible temporary
-	 *            state. When forcing, state is not revertable.
-	 * @return True if the nodes are swapped, false if a swap is not possible (due
-	 *         to a dataflow dependency).
+	 * @param i0 The index of the node to shove
+	 * @return True when the shove was successful, false otherwise (i.e. nothing
+	 *         changed).
 	 */
-	public boolean swapNodes(int i1, int i2, boolean force) {
-		if (force) {
-			swap(i1, i2);
-			return false;
+	public boolean shoveRight(int i0) {
+		Node n = list[i0];
+		for (int i = i0 + 1; i < list.length; i++) {
+			if (!n.isPredecessorOf(list[i])) {
+				shoveCnt = i - i0;
+				shovePos = i0;
+				n = list[i];
+				for (int j = i; j > i0; j--)
+					list[j] = list[j - 1];
+				list[i0] = n;
+				return temporary = true;
+			}
 		}
+		return temporary = false;
+	}
 
-		if (list[i1].hasFlowDependency(list[i2]))
-			return false;
-		if (temporary)
-			throw new RuntimeException("Cannot swap nodes - the last swap neither has been accepted nor reverted.");
-		swap(iSwap1 = i1, iSwap2 = i2);
-		return temporary = true;
+	/**
+	 * Shoves the node at the specified index to the left (i.e. up).
+	 * 
+	 * @param i0 The index of the node to shove
+	 * @return True when the shove was successful, false otherwise (i.e. nothing
+	 *         changed).
+	 */
+	public boolean shoveLeft(int i0) {
+		Node n = list[i0];
+		for (int i = i0 - 1; i >= 0; i--) {
+			if (!list[i].isPredecessorOf(n)) {
+				shoveCnt = i - i0; // < 0
+				shovePos = i0;
+				n = list[i];
+				for (int j = i; j < i0; j++)
+					list[j] = list[j + 1];
+				list[i0] = n;
+				return temporary = true;
+			}
+		}
+		return temporary = false;
 	}
 
 	/**
@@ -113,7 +167,18 @@ public class SDCNodeList {
 	public void revert() {
 		if (!temporary)
 			throw new RuntimeException("Nothing to revert. Require a call of swapNodes() in order to revert this swap.");
-		swap(iSwap2, iSwap1);
+		if (shoveCnt < 0) { // revert shoveLeft
+			shoveCnt = -shoveCnt;
+			Node n = list[shovePos];
+			for (int i = 0; i < shoveCnt; i++)
+				list[shovePos - i] = list[shovePos - i - 1];
+			list[shovePos - shoveCnt] = n;
+		} else {
+			Node n = list[shovePos];
+			for (int i = 0; i < shoveCnt; i++)
+				list[shovePos + i] = list[shovePos + i + 1];
+			list[shovePos + shoveCnt] = n;
+		}
 		temporary = false;
 	}
 
@@ -163,5 +228,15 @@ public class SDCNodeList {
 	 */
 	public Node get(int i) {
 		return list[i];
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (Node n : list) {
+			sb.append(", ");
+			sb.append(n.id);
+		}
+		return "[" + sb.substring(2).toString() + "]";
 	}
 }

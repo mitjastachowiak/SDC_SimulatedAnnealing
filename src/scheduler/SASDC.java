@@ -28,7 +28,7 @@ public class SASDC extends Scheduler {
 	/**
 	 * Indices for node swapping.
 	 */
-	private int i1, i2;
+	private int shove;
 
 	/**
 	 * Index of first resource constraint (for faster modification of the
@@ -56,12 +56,58 @@ public class SASDC extends Scheduler {
 		SDCNodeList nodes = new SDCNodeList(constraints, sg);
 		LinearProgram lp = getBaseLP();
 
-		i1 = 0;
-		i2 = vars.size() - 1;
+		rc0 = lp.getConstraints().size() - 1;
 
-		Schedule best = initial(nodes, lp);
+		// shuffle initial schedule and calc start temperature
+		System.out.println("SDC with SA: Setting up initial configuration.");
+		Schedule current = makeSchedule(nodes, lp);
+		double[] cost = new double[nodes.length];
+		for (int i = 0; i < nodes.length; i++) {
+			current = modify(nodes, lp);
+			cost[i] = current.cost();
+		}
 
-		best.draw("debug.dot");
+		// run SA
+		double T = 20 * stdDeviation(cost), // initial temperature
+				tu = .5, // temperature update factor
+				ar = 1, // acceptance ratio
+				changes = 1, // total changes
+				acceptedChanges = 1; // accepted Changes
+
+		int inner = (int) Math.ceil(Math.pow(nodes.length, 4.0 / 3));
+
+		System.out.printf("SDC with SA: Running annealing with T0 = %f ...%n", T);
+		double time = System.nanoTime();
+		while (ar > .1) {
+			for (int i = 0; i < inner; i++) {
+				changes++;
+				Schedule temp = modify(nodes, lp);
+				double dc = temp.cost() - current.cost();
+				double r = Math.random();
+				if (r < Math.exp(-dc / T)) {
+					current = temp;
+					acceptedChanges++;
+
+				}
+			}
+			ar = acceptedChanges / changes;
+			double tutmp = tu;
+			if (ar > .96)
+				tu = .5;
+			else if (ar > .8)
+				tu = .9;
+			else if (ar > .15)
+				tu = .95;
+			else
+				tu = .8;
+			if (tutmp != tu)
+				System.out.println("\t- Set γ to " + tu);
+			T *= tu;
+		}
+
+		current.draw("current.dot");
+
+		System.out.printf("Convergence after %s iterations in %fsec (cost: %s).%n", changes, Math.round(time - System.nanoTime() / 1e8) / 1e2, current.cost());
 
 		// double[] solution = solver.solve(lp);
 		// System.out.printf("%s %s%n", "tMax", solution[vars.size()]);
@@ -71,13 +117,10 @@ public class SASDC extends Scheduler {
 	}
 
 	/**
-	 * Sets up the initial schedule.
-	 * 
-	 * @return The initial schedule.
+	 * Creates a schedule from the given node list.
 	 */
-	private Schedule initial(SDCNodeList nodes, LinearProgram lp) {
-		ArrayList<Constraint> lpc = lp.getConstraints();
-		rc0 = lpc.size();
+	private Schedule makeSchedule(SDCNodeList nodes, LinearProgram lp) {
+		ArrayList<Constraint> lpc = new ArrayList<Constraint>(lp.getConstraints().subList(0, rc0));
 
 		for (int i = 0; i < nodes.length; i++) {
 			Node n1 = nodes.get(i), n2 = nodes.nextOfType(n1.getRT(), i + 1);
@@ -88,19 +131,14 @@ public class SASDC extends Scheduler {
 			d[vars.get(n2)] = -1;
 			lpc.add(new LinearSmallerThanEqualsConstraint(d, -n1.getDelay(), String.format("r%s", i)));
 		}
+		lp.setConstraints(lpc);
 
-		return lp2Schedule(lp);
-	}
-
-	/**
-	 * Creates a schedule from a linear program.
-	 * 
-	 * @param lp The linear program which will be solved in order to create the
-	 *            schedule.
-	 */
-	private Schedule lp2Schedule(LinearProgram lp) {
 		Schedule ret = new Schedule();
 		double[] d = lpSolver.solve(lp);
+		if (d[0] + d[1] + d[2] + d[3] + d[4] + d[5] == 0) {
+			System.err.println("Infeasable model for order:\n\t" + nodes);
+			System.exit(1);
+		}
 		for (Entry<Node, Integer> e : vars.entrySet()) {
 			Node n = e.getKey();
 			int i0 = (int) Math.ceil(d[e.getValue()]);
@@ -108,6 +146,27 @@ public class SASDC extends Scheduler {
 			ret.add(n, i);
 		}
 		return ret;
+	}
+
+	/**
+	 * Modifies a node list and creates a new schedule from it.
+	 * 
+	 * @param nodes The nodelist
+	 * @param lp The linear program
+	 * @return A modified schedule
+	 */
+	private Schedule modify(SDCNodeList nodes, LinearProgram lp) {
+		int i0 = Integer.MIN_VALUE;
+		do {
+			// if (i0 != Integer.MIN_VALUE)
+			// System.out.println("impossible");
+
+			i0 = (int) Math.round((2 * Math.random() - 1) * (nodes.length - 1));
+			// System.out.printf("Shove " + (i0 < 0 ? "left: " : "right: ") + "%1$-3s ",
+			// Math.abs(i0));
+		} while (!(i0 < 0 ? nodes.shoveLeft(-i0) : nodes.shoveRight(i0)));
+		// System.out.println("ok " + nodes.toString());
+		return makeSchedule(nodes, lp);
 	}
 
 	/**
@@ -146,4 +205,22 @@ public class SASDC extends Scheduler {
 		return lp;
 	}
 
+	/**
+	 * Calculates the standard deviation of the given values. See:
+	 * {@link https://stackoverflow.com/questions/7988486/how-do-you-calculate-the-variance-median-and-standard-deviation-in-c-or-java}
+	 * 
+	 * @param vals The values.
+	 */
+	private double stdDeviation(double[] vals) {
+		double mean = 0;
+		for (double d : vals)
+			mean += d;
+		mean = mean / vals.length;
+
+		double tmp = 0;
+		for (double d : vals)
+			tmp += (d - mean) * (d - mean);
+
+		return Math.sqrt(tmp / vals.length);
+	}
 }

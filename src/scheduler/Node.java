@@ -35,6 +35,11 @@ public class Node {
 	private RT rt;
 
 	/**
+	 * The depth of the node (i.e. 0 is root, ...)
+	 */
+	private int depth = -1;
+
+	/**
 	 * @param id - ID of the new node
 	 * @param rt - resource type
 	 */
@@ -307,6 +312,19 @@ public class Node {
 	 */
 	public int getDelay() {
 		return rt.delay;
+	}
+
+	/**
+	 * Gets the depth of the node (whereas 0 is root, 1 is successor of root and so on).
+	 */
+	public int getDepth() {
+		if (depth == -1) {
+			int m = 0;
+			for (Node n : predecessors.keySet())
+				m = Math.max(m, n.getDepth());
+			depth = m;
+		}
+		return depth;
 	}
 
 	/**

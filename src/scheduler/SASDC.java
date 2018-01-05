@@ -24,11 +24,7 @@ public class SASDC extends Scheduler {
 	private HashMap<Node, Integer> vars;
 	private RC constraints;
 	private LinearProgramSolver lpSolver;
-
-	/**
-	 * Indices for node swapping.
-	 */
-	private int shove;
+	private int quality;
 
 	/**
 	 * Index of first resource constraint (for faster modification of the
@@ -36,11 +32,14 @@ public class SASDC extends Scheduler {
 	 */
 	private int rc0;
 
-	public SASDC(RC constraints) {
+	public SASDC(RC constraints, int quality) {
 		if (constraints == null)
 			throw new IllegalArgumentException("Resource constraints cannot be null.");
+		if (quality < 1 || quality > 10)
+			throw new IllegalArgumentException("Argument quality must be in range 0 <= quality <= 10");
 
 		this.constraints = constraints;
+		this.quality = quality;
 		this.lpSolver = SolverFactory.newDefault();
 	}
 
@@ -49,7 +48,7 @@ public class SASDC extends Scheduler {
 		// index all nodes
 		vars = new HashMap<>();
 		for (Node n : sg) {
-			System.out.printf("x%s => %s%n", vars.size(), n.id);
+			//System.out.printf("x%s => %s%n", vars.size(), n.id);
 			vars.put(n, vars.size());
 		}
 
@@ -74,20 +73,23 @@ public class SASDC extends Scheduler {
 				changes = 1, // total changes
 				acceptedChanges = 1; // accepted Changes
 
-		int inner = (int) Math.ceil(Math.pow(nodes.length, 4.0 / 3));
+		int inner = this.quality * (int) Math.ceil(Math.pow(nodes.length, 4.0 / 3));
 
-		System.out.printf("SDC with SA: Running annealing with T0 = %f ...%n", T);
+		System.out.printf("SDC with SA: Running annealing with quality = %s and T0 = %.2f ...%n", quality, T);
 		double time = System.nanoTime();
-		while (ar > .1) {
+		while (ar > .12) {
+			int zeroChange = 0;
 			for (int i = 0; i < inner; i++) {
 				changes++;
 				Schedule temp = modify(nodes, lp);
 				double dc = temp.cost() - current.cost();
+				if (dc == 0) {
+					dc = 1e-4;//(double) -i / ;
+				}
 				double r = Math.random();
 				if (r < Math.exp(-dc / T)) {
 					current = temp;
 					acceptedChanges++;
-
 				}
 			}
 			ar = acceptedChanges / changes;
@@ -101,19 +103,13 @@ public class SASDC extends Scheduler {
 			else
 				tu = .8;
 			if (tutmp != tu)
-				System.out.println("\t- Set temperature factor to " + tu);
+				System.out.printf("\t- Updating temperature factor %.2f (iterations: %.0f, temperature: %.2f, elapsed time: %.1fsec)%n", tu, changes, T, (System.nanoTime() - time) / 1e9);
 			T *= tu;
 		}
 
-		current.draw("current.dot");
+		System.out.printf("Convergence after %.0f iterations in %.1fsec (cost: %.2f).%n", changes, (System.nanoTime() - time) / 1e9, current.cost());
 
-		System.out.printf("Convergence after %s iterations in %fsec (cost: %s).%n", changes, Math.round(time - System.nanoTime() / 1e8) / 1e2, current.cost());
-
-		// double[] solution = solver.solve(lp);
-		// System.out.printf("%s %s%n", "tMax", solution[vars.size()]);
-		// for (Node n : vars.keySet())
-		// System.out.printf("%s (%s) %s%n", n.id, vars.get(n), solution[vars.get(n)]);
-		return null;
+		return current;
 	}
 
 	/**

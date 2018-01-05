@@ -127,7 +127,7 @@ public class RC {
 	 * Get number of compatible resources for the supplied resource type.
 	 * 
 	 * @param op - Resource type of interest
-	 * @return The number of availble resources for the given resource type.
+	 * @return The number of available resources for the given resource type.
 	 */
 	public int getResCount(RT op) {
 		return operations.get(op).size();

@@ -1,12 +1,12 @@
 package scheduler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.function.Supplier;
+import java.util.Map.Entry;
 
-import com.sun.org.apache.xpath.internal.functions.Function;
-
+import scheduler.sdcutil.SDCNodeList;
+import scpsolver.constraints.Constraint;
 import scpsolver.constraints.LinearBiggerThanEqualsConstraint;
-import scpsolver.constraints.LinearConstraint;
 import scpsolver.constraints.LinearSmallerThanEqualsConstraint;
 import scpsolver.lpsolver.LinearProgramSolver;
 import scpsolver.lpsolver.SolverFactory;
@@ -21,53 +21,93 @@ import scpsolver.problems.LinearProgram;
  */
 public class SASDC extends Scheduler {
 
-	HashMap<Node, Integer> vars;
+	private HashMap<Node, Integer> vars;
+	private RC constraints;
+	private LinearProgramSolver lpSolver;
 
-	@SuppressWarnings("unused")
+	/**
+	 * Indices for node swapping.
+	 */
+	private int i1, i2;
+
+	/**
+	 * Index of first resource constraint (for faster modification of the
+	 * LinearProgram).
+	 */
+	private int rc0;
+
+	public SASDC(RC constraints) {
+		if (constraints == null)
+			throw new IllegalArgumentException("Resource constraints cannot be null.");
+
+		this.constraints = constraints;
+		this.lpSolver = SolverFactory.newDefault();
+	}
+
 	@Override
 	public Schedule schedule(Graph sg) {
 		// index all nodes
 		vars = new HashMap<>();
-		for (Node n : sg)
+		for (Node n : sg) {
+			System.out.printf("x%s => %s%n", vars.size(), n.id);
 			vars.put(n, vars.size());
+		}
 
+		SDCNodeList nodes = new SDCNodeList(constraints, sg);
 		LinearProgram lp = getBaseLP();
 
-		// test resource constraints:
-		HashMap<String, Integer> ids = new HashMap<>();
-		for (Node n : sg)
-			ids.put(n.id, vars.get(n));
+		i1 = 0;
+		i2 = vars.size() - 1;
 
+		Schedule best = initial(nodes, lp);
 
-		// mul
-		lp.addConstraint(resourceConstraint(ids.get("N1_MUL"), ids.get("N2_MUL")));
-		lp.addConstraint(resourceConstraint(ids.get("N2_MUL"), ids.get("N3_MUL")));
-		lp.addConstraint(resourceConstraint(ids.get("N3_MUL"), ids.get("N6_MUL")));
-		lp.addConstraint(resourceConstraint(ids.get("N6_MUL"), ids.get("N7_MUL")));
-		lp.addConstraint(resourceConstraint(ids.get("N7_MUL"), ids.get("N8_MUL")));
-		
-		// alu
-		lp.addConstraint(resourceConstraint(ids.get("N4_SUB"), ids.get("N10_ADD")));
-		lp.addConstraint(resourceConstraint(ids.get("N10_ADD"), ids.get("N5_SUB")));
-		lp.addConstraint(resourceConstraint(ids.get("N5_SUB"), ids.get("N9_ADD")));
-		lp.addConstraint(resourceConstraint(ids.get("N9_ADD"), ids.get("N11_CMP")));
+		best.draw("debug.dot");
 
-		LinearProgramSolver solver = SolverFactory.newDefault();
-		double[] solution = solver.solve(lp);
-		System.out.printf("%s %s%n", "tMax", solution[vars.size()]);
-		for (Node n : vars.keySet())
-			System.out.printf("%s (%s)  %s%n", n.id, vars.get(n), solution[vars.get(n)]);
+		// double[] solution = solver.solve(lp);
+		// System.out.printf("%s %s%n", "tMax", solution[vars.size()]);
+		// for (Node n : vars.keySet())
+		// System.out.printf("%s (%s) %s%n", n.id, vars.get(n), solution[vars.get(n)]);
 		return null;
 	}
 
 	/**
-	 * Gets a resource constraint for the given node-indices.
+	 * Sets up the initial schedule.
+	 * 
+	 * @return The initial schedule.
 	 */
-	private LinearConstraint resourceConstraint(int parent, int node) {
-		double[] d = new double[vars.size()];
-		d[parent] = 1;
-		d[node] = -1;
-		return new LinearSmallerThanEqualsConstraint(d, -1, String.format("r%s_%s", node, parent));
+	private Schedule initial(SDCNodeList nodes, LinearProgram lp) {
+		ArrayList<Constraint> lpc = lp.getConstraints();
+		rc0 = lpc.size();
+
+		for (int i = 0; i < nodes.length; i++) {
+			Node n1 = nodes.get(i), n2 = nodes.nextOfType(n1.getRT(), i + 1);
+			if (n2 == null)
+				continue;
+			double[] d = new double[vars.size()];
+			d[vars.get(n1)] = 1;
+			d[vars.get(n2)] = -1;
+			lpc.add(new LinearSmallerThanEqualsConstraint(d, -n1.getDelay(), String.format("r%s", i)));
+		}
+
+		return lp2Schedule(lp);
+	}
+
+	/**
+	 * Creates a schedule from a linear program.
+	 * 
+	 * @param lp The linear program which will be solved in order to create the
+	 *            schedule.
+	 */
+	private Schedule lp2Schedule(LinearProgram lp) {
+		Schedule ret = new Schedule();
+		double[] d = lpSolver.solve(lp);
+		for (Entry<Node, Integer> e : vars.entrySet()) {
+			Node n = e.getKey();
+			int i0 = (int) Math.ceil(d[e.getValue()]);
+			Interval i = new Interval(i0, i0 + n.getRT().delay);
+			ret.add(n, i);
+		}
+		return ret;
 	}
 
 	/**
@@ -96,9 +136,9 @@ public class SASDC extends Scheduler {
 				d = new double[num];
 				d[vars.get(p)] = 1;
 				d[vars.get(n)] = -1;
-				lp.addConstraint(new LinearSmallerThanEqualsConstraint(d, -1, String.format("c%s", i++)));
-				// lp.addConstraint(new LinearSmallerThanEqualsConstraint(d, -p.getDelay(),
+				// lp.addConstraint(new LinearSmallerThanEqualsConstraint(d, -1,
 				// String.format("c%s", i++)));
+				lp.addConstraint(new LinearSmallerThanEqualsConstraint(d, -p.getDelay(), String.format("c%s", i++)));
 			}
 
 		}

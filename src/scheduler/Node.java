@@ -321,7 +321,7 @@ public class Node {
 		if (depth == -1) {
 			int m = 0;
 			for (Node n : predecessors.keySet())
-				m = Math.max(m, n.getDepth());
+				m = Math.max(m, n.getDepth()+1);
 			depth = m;
 		}
 		return depth;

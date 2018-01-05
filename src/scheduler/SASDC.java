@@ -101,7 +101,7 @@ public class SASDC extends Scheduler {
 			else
 				tu = .8;
 			if (tutmp != tu)
-				System.out.println("\t- Set γ to " + tu);
+				System.out.println("\t- Set temperature factor to " + tu);
 			T *= tu;
 		}
 

@@ -35,20 +35,6 @@ public class SDCNodeList {
 			ordered.add(node);
 		ordered.sort((n1, n2) -> n1.getDepth() - n2.getDepth());
 		ordered.toArray(list);
-		
-//		Node[] tmp = new Node[length];
-//		tmp[0] = list[2];
-//		tmp[1] = list[10];
-//		tmp[2] = list[4];
-//		tmp[3] = list[8];
-//		tmp[4] = list[0];
-//		tmp[5] = list[9];
-//		tmp[6] = list[3];
-//		tmp[7] = list[6];
-//		tmp[8] = list[4];
-//		tmp[9] = list[7];
-//		tmp[10] = list[5];
-//		list = tmp;
 	}
 
 	/**

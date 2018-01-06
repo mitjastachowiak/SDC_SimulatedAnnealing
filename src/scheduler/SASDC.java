@@ -48,7 +48,7 @@ public class SASDC extends Scheduler {
 		// index all nodes
 		vars = new HashMap<>();
 		for (Node n : sg) {
-			//System.out.printf("x%s => %s%n", vars.size(), n.id);
+			// System.out.printf("x%s => %s%n", vars.size(), n.id);
 			vars.put(n, vars.size());
 		}
 
@@ -73,7 +73,7 @@ public class SASDC extends Scheduler {
 				changes = 1, // total changes
 				acceptedChanges = 1; // accepted Changes
 
-		int inner = this.quality * (int) Math.ceil(Math.pow(nodes.length, 4.0 / 3));
+		int inner = (int) Math.ceil(this.quality * Math.pow(nodes.length, 4.0 / 3));
 
 		System.out.printf("SDC with SA: Running annealing with quality = %s and T0 = %.2f ...%n", quality, T);
 		double time = System.nanoTime();
@@ -84,7 +84,7 @@ public class SASDC extends Scheduler {
 				Schedule temp = modify(nodes, lp);
 				double dc = temp.cost() - current.cost();
 				if (dc == 0) {
-					dc = 1e-4;//(double) -i / ;
+					dc = 1e-4;// (double) -i / ;
 				}
 				double r = Math.random();
 				if (r < Math.exp(-dc / T)) {

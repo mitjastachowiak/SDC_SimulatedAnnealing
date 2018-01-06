@@ -66,7 +66,7 @@ public class SASDC extends Scheduler {
 			cost[i] = current.cost();
 		}
 
-		// run SA
+		// run SA...
 		double T = 20 * stdDeviation(cost), // initial temperature
 				tu = .5, // temperature update factor
 				ar = 1, // acceptance ratio
@@ -82,9 +82,9 @@ public class SASDC extends Scheduler {
 				changes++;
 				Schedule temp = modify(nodes, lp);
 				double dc = temp.cost() - current.cost();
-				if (dc == 0) {
-					dc = 1e-4;// (double) -i / ;
-				}
+				//if (dc == 0) {
+				//	dc = 1e-4;// (double) -i / ;
+				//}
 				double r = Math.random();
 				if (r < Math.exp(-dc / T)) {
 					current = temp;

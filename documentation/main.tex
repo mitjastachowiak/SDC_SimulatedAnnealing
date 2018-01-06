@@ -1,0 +1,74 @@
+\documentclass[colorback,accentcolor=tud1c,11pt]{tudreport}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+%\usepackage[T1]{fontenc}
+
+\usepackage{booktabs}
+%\usepackage{multirow}
+%\usepackage{longtable}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{subfigure} 	
+\usepackage{float}
+\usepackage{amsmath}
+
+
+\newcommand\todo[1]{\textcolor{red}{#1}}
+\newcommand\code[1]{\texttt{#1}}
+%\usepackage{floatflt}
+
+\graphicspath{{./img/}}
+
+%\newlength{\longtablewidth}
+%\setlength{\longtablewidth}{0.675\linewidth}
+
+\title{Mini-task report: SDC with simulated annealing}
+\subtitle{Ludwig Meysel, Mitja Stachowiak}
+
+\begin{document}
+  \maketitle
+
+  \chapter{Introduction}
+
+  The task was to implement a simulated annealing approach (SA) for SDC (\underline{s}ystem of \underline{d}ifference \underline{c}onstraints). LPsolve is used to get a schedule for a given set of constraints. The SA-algorithm mutates the order of the constraints to reduce the number of clock cycles of the schedule.
+
+  \chapter{Simulated Annealing}
+  The principal structure of any simulated annealing looks like this:\\
+  \fbox{\parbox{\linewidth}{
+  S = RandomConfiguration();\\
+  T = InitialTemperature();\\
+  while (ExitCriterion()==false) \{\\
+  \phantom{}~~while (InnerLoopCriterion() == false) \{\\
+  \phantom{}~~~~S\textsubscript{new} = Generate(S);\\
+  \phantom{}~~~~$\Delta$ C = Cost(S\textsubscript{new})-Cost(S);\\
+  \phantom{}~~~~r = random(0,1);\\
+  \phantom{}~~~~if (r < $e^{- \Delta C/T}$) S = S\textsubscript{new}\\
+  \phantom{}~~\}\\
+  \phantom{}~~T = updateTemperature();\\
+  \}
+  }}\\ \\
+  The implementation is located in scheduler/SASDC.java:schedule. The parameters are:
+  \begin{itemize}
+  	\item \emph{Random Configuration} ...
+  	\item \emph{Initial Temperature} is determined by applying n(nodes) random changes and saving the costs of each change. T is then $20 * standardDeviation(costs)$.
+  	\item \emph{Exit Criterion} is the condition, when the simulated annealing should stop. For each temperature, the number of applied changes and the number of accepted changes is counted. When less then 12\% of the changes are accepted, the algorithm stops.
+  	\item \emph{Update Temperature} decreases T by a factor tu, which depends on the acceptance ratio as well:
+  	\begin{tabular}{ c | c }
+  		acceptance ratio (ar) & temperature factor (tu) \\
+  		\hline
+  		> 96\% & 0.5 \\
+  		96 .. 80\% & 0.9 \\
+  		80 .. 15\% & 0.95 \\
+  		< 15\% & 0.8 \\
+  	\end{tabular}
+    \item \emph{Inner Loop Criterion} determines, how many changes are tested for the same temperature. Each change usually moves one node in the ordering of constraint-equations. The larger the number of nodes becomes, the more often each node should be moved, so the number of iterations should depend on the node count. Further more, there is a quality factor $\in [1 .. 10]$ for the algorithm, which can be passed via the third program argument. The formula $n_{inner} = \left\lceil quality * n_{nodes}^{4/3} \right\rceil$ is known to yield a result, thats quality belongs to the given quality.
+  \end{itemize}
+ 
+ 
+ \chapter{Conclusion}
+ 
+
+%  \bibliographystyle{plain}
+%  \bibliography{references}
+\end{document}
+

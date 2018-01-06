@@ -20,7 +20,6 @@ import scheduler.RT;
 public class SDCNodeList {
 	public final int length;
 	private int shovePos, shoveCnt; // cnt +/- => left/right
-	private boolean temporary = false;
 	private HashMap<RT, Set<RT>> rtSet; // maps types to a resource (which could contain more types).
 	private HashMap<RT, Integer> rtCount; // the number of resources compatible with certain type.
 	private Node[] list;
@@ -71,37 +70,6 @@ public class SDCNodeList {
 	}
 
 	/**
-	 * Swaps the two nodes at the given indices in the list.
-	 * 
-	 * @param i1 The index of the one node.
-	 * @param i2 The index of the other node.
-	 */
-	private void swap(int i1, int i2) {
-		Node tmp = list[i1];
-		list[i1] = list[i2];
-		list[i2] = tmp;
-	}
-	//
-	// /**
-	// * Swaps the two nodes at the given indices in the list and marks the list as
-	// * temporary.
-	// *
-	// * @param i1 The index of the one node.
-	// * @param i2 The index of the other node.
-	// * @return True if the nodes are swapped, false if a swap is not possible (due
-	// * to a dataflow dependency).
-	// */
-	// public boolean swapNodes(int i1, int i2) {
-	// if (list[i1].hasFlowDependency(list[i2]))
-	// return false;
-	// if (temporary)
-	// throw new RuntimeException("Cannot swap nodes - the last swap neither has
-	// been accepted nor reverted.");
-	// swap(iSwap1 = i1, iSwap2 = i2);
-	// return temporary = true;
-	// }
-
-	/**
 	 * Shoves the node at the specified index to the right (i.e. down).
 	 * 
 	 * @param i0 The index of the node to shove
@@ -118,10 +86,10 @@ public class SDCNodeList {
 				for (int j = i; j > i0; j--)
 					list[j] = list[j - 1];
 				list[i0] = n;
-				return temporary = true;
+				return true;
 			}
 		}
-		return temporary = false;
+		return false;
 	}
 
 	/**
@@ -141,18 +109,16 @@ public class SDCNodeList {
 				for (int j = i; j < i0; j++)
 					list[j] = list[j + 1];
 				list[i0] = n;
-				return temporary = true;
+				return true;
 			}
 		}
-		return temporary = false;
+		return false;
 	}
 
 	/**
 	 * Reverts the last swap.
 	 */
 	public void revert() {
-		if (!temporary)
-			throw new RuntimeException("Nothing to revert. Require a call of swapNodes() in order to revert this swap.");
 		if (shoveCnt < 0) { // revert shoveLeft
 			shoveCnt = -shoveCnt;
 			Node n = list[shovePos];
@@ -165,16 +131,6 @@ public class SDCNodeList {
 				list[shovePos + i] = list[shovePos + i + 1];
 			list[shovePos + shoveCnt] = n;
 		}
-		temporary = false;
-	}
-
-	/**
-	 * Accepts the last swap.
-	 */
-	public void accept() {
-		if (!temporary)
-			throw new RuntimeException("Nothing to accept. Require call of swapNodes() in order to accept this swap.");
-		temporary = false;
 	}
 
 	/**

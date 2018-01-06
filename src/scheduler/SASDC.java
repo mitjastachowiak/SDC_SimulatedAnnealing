@@ -78,7 +78,6 @@ public class SASDC extends Scheduler {
 		System.out.printf("SDC with SA: Running annealing with quality = %s and T0 = %.2f ...%n", quality, T);
 		double time = System.nanoTime();
 		while (ar > .12) {
-			int zeroChange = 0;
 			for (int i = 0; i < inner; i++) {
 				changes++;
 				Schedule temp = modify(nodes, lp);
@@ -90,7 +89,8 @@ public class SASDC extends Scheduler {
 				if (r < Math.exp(-dc / T)) {
 					current = temp;
 					acceptedChanges++;
-				}
+				} else
+					nodes.revert();
 			}
 			ar = acceptedChanges / changes;
 			double tutmp = tu;

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.1.6)  7 JAN 2018 22:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.1.6)  7 JAN 2018 22:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1072,11 +1072,6 @@ File: ts15ch.fd 2009/08/06 Fontinst v1.927 font definitions for TS1/5ch.
 
 ]
 chapter 4.
-
-Overfull \hbox (3.8006pt too wide) in paragraph at lines 104--149
-[] \T1/5ch/m/n/11 The
- []
-
 [4
 
 ]
@@ -1105,7 +1100,7 @@ onts/type1/public/mathdesign/mdbch/md-chr7v.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/public/mathdesign/mdbch/md-chr7y.pfb></usr/share/texlive/texmf-dist
 /fonts/type1/public/mathdesign/mdbch/md-chri7m.pfb></usr/share/texlive/texmf-di
 st/fonts/type1/adobe/utopia/putri8a.pfb>
-Output written on main.pdf (6 pages, 110827 bytes).
+Output written on main.pdf (6 pages, 110812 bytes).
 PDF statistics:
  80 PDF objects out of 1000 (max. 8388607)
  56 compressed objects within 1 object stream

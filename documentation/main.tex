@@ -100,12 +100,7 @@
   \end{itemize}
 
 
-
-  \include{implementation}
-
-
-
-  \chapter{Results}
+  \chapter{Evaluation}
   \vspace{100pt}
   \begin{tabular}{ c | r | r | r | r | r | r | r }
     File &
@@ -117,39 +112,39 @@
     \begin{rotate}{60} Number of Iterations \end{rotate} \hspace{12pt} &
     \begin{rotate}{60} Runtime / s \end{rotate} \hspace{12pt} \\
    \hline
-   \multirow{3}{*}{ADPCMn-decode-271-381} & \multirow{3}{*}{27} & \multirow{3}{*}{64,8} & \multirow{3}{*}{56,0} & 31,9 & 1 & 20494 & 29,39 \\
-    &  &  &  & 30,5 & 5 & 82216 & 113,38 \\
-    &  &  &  & 30,5 & 10 & 144181 & 185,55 \\
-   \multirow{3}{*}{ADPCMn-decode-425-472} & \multirow{3}{*}{12} & \multirow{3}{*}{23,8} & \multirow{3}{*}{23,8} & 34,2 & 1 & 85 & 0,11 \\
-    &  &  &  & 21,8 & 5 & 7591 & 6,37 \\
-    &  &  &  & 21,8 & 10 & 11001 & 9,13 \\
-   \multirow{3}{*}{ADPCMn-decode-524-553} & \multirow{3}{*}{7} & \multirow{3}{*}{25,4} & \multirow{3}{*}{26,4} & 25,4 & 1 & 15 & 0,02 \\
-    &  &  &  & 25,4 & 5 & 68 & 0,07 \\
-    &  &  &  & 25,4 & 10 & 135 & 0,13 \\
-   \multirow{3}{*}{ADPCMn-decode-559-599} & \multirow{3}{*}{9} & \multirow{3}{*}{26,1} & \multirow{3}{*}{27,2} & 28,2 & 1 & 20 & 0,03 \\
-    &  &  &  & 25,1 & 5 & 4137 & 3,26 \\
-   &  &  &  & 28,2 & 10 & 377 & 0,35 \\
-   \multirow{3}{*}{ADPCMn-decode-631-729} & \multirow{3}{*}{23} & \multirow{3}{*}{44,8} & \multirow{3}{*}{40,0} & 33,3 & 1 & 5017 & 5,81 \\
-    &  &  &  & 24,3 & 5 & 13121 & 14,65 \\
-    &  &  &  & 22,9 & 10 & 108076 & 120,56 \\
-   \multirow{3}{*}{ADPCMn-decode-771-791} & \multirow{3}{*}{5} & \multirow{3}{*}{13,5} & \multirow{3}{*}{13,5} & 22,5 & 1 & 10 & 0,01 \\
-    &  &  &  & 22,5 & 5 & 44 & 0,04 \\
-    &  &  &  & 22,5 & 10 & 87 & 0,08 \\
-   \multirow{3}{*}{ADPCMn-decode-803-832} & \multirow{3}{*}{8} & \multirow{3}{*}{18,8} & \multirow{3}{*}{18,8} & 20,2 & 1 & 17 & 0,02 \\
-    &  &  &  & 20,2 & 5 & 81 & 0,08 \\
-    &  &  &  & 20,2 & 10 & 161 & 0,16 \\
-   \multirow{3}{*}{AESrkgcyclic} & \multirow{3}{*}{24} & \multirow{3}{*}{24,4} & \multirow{3}{*}{23,4} & 37,4 & 1 & 421 & 0,61 \\
-    &  &  &  & 32,4 & 5 & 13881 & 18,84 \\
-    &  &  &  & 30,4 & 10 & 28414 & 38,14 \\
-   \multirow{3}{*}{BLAKE256Digest-processBlock-160-230} & \multirow{3}{*}{21} & \multirow{3}{*}{57,4} & \multirow{3}{*}{58,4} & 32,4 & 1 & 10905 & 12,11 \\
-    &  &  &  & 22,4 & 5 & 58291 & 64,11 \\
-    &  &  &  & 31,4 & 10 & 175161 & 194,06 \\
-   \multirow{2}{*}{BLAKE256Digest-processBlock-189-1577} & \multirow{2}{*}{308} & \multirow{2}{*}{414,9} & \multirow{2}{*}{128,7} & 110,9 & 1 & 6244 & 241,63 \\
-    &  &  &  & 97,9 & 5 & 31204 & 1236,87 \\
-   \multirow{3}{*}{ContrastFilter-filter-13-252} & \multirow{3}{*}{47} & \multirow{3}{*}{72,0} & \multirow{3}{*}{67,7} & 50,8 & 1 & 4251 & 9,49 \\
-   &  &  &  & 37,7 & 5 & 24622 & 54,00 \\
-    &  &  &  & 33,2 & 10 & 101821 & 218,61 \\
-   \multirow{1}{*}{ECOH256Digest-AES2RoundsAll-2-666} & \multirow{1}{*}{179} & \multirow{1}{*}{262,3} & \multirow{1}{*}{174,4} & 58,1 & 1 & 175567 & 2733,60 \\
+   \multirow{3}{*}{ADPCMn-decode-271-381} & \multirow{3}{*}{27} & \multirow{3}{*}{64.8} & \multirow{3}{*}{56.0} & 31.9 & 1 & 20494 & 29.39 \\
+    &  &  &  & 30.5 & 5 & 82216 & 113.38 \\
+    &  &  &  & 30.5 & 10 & 144181 & 185.55 \\
+   \multirow{3}{*}{ADPCMn-decode-425-472} & \multirow{3}{*}{12} & \multirow{3}{*}{23.8} & \multirow{3}{*}{23.8} & 34.2 & 1 & 85 & 0.11 \\
+    &  &  &  & 21.8 & 5 & 7591 & 6.37 \\
+    &  &  &  & 21.8 & 10 & 11001 & 9.13 \\
+   \multirow{3}{*}{ADPCMn-decode-524-553} & \multirow{3}{*}{7} & \multirow{3}{*}{25.4} & \multirow{3}{*}{26.4} & 25.4 & 1 & 15 & 0.02 \\
+    &  &  &  & 25.4 & 5 & 68 & 0.07 \\
+    &  &  &  & 25.4 & 10 & 135 & 0.13 \\
+   \multirow{3}{*}{ADPCMn-decode-559-599} & \multirow{3}{*}{9} & \multirow{3}{*}{26.1} & \multirow{3}{*}{27.2} & 28.2 & 1 & 20 & 0.03 \\
+    &  &  &  & 25.1 & 5 & 4137 & 3.26 \\
+   &  &  &  & 28.2 & 10 & 377 & 0.35 \\
+   \multirow{3}{*}{ADPCMn-decode-631-729} & \multirow{3}{*}{23} & \multirow{3}{*}{44.8} & \multirow{3}{*}{40.0} & 33.3 & 1 & 5017 & 5.81 \\
+    &  &  &  & 24.3 & 5 & 13121 & 14.65 \\
+    &  &  &  & 22.9 & 10 & 108076 & 120.56 \\
+   \multirow{3}{*}{ADPCMn-decode-771-791} & \multirow{3}{*}{5} & \multirow{3}{*}{13.5} & \multirow{3}{*}{13.5} & 22.5 & 1 & 10 & 0.01 \\
+    &  &  &  & 22.5 & 5 & 44 & 0.04 \\
+    &  &  &  & 22.5 & 10 & 87 & 0.08 \\
+   \multirow{3}{*}{ADPCMn-decode-803-832} & \multirow{3}{*}{8} & \multirow{3}{*}{18.8} & \multirow{3}{*}{18.8} & 20.2 & 1 & 17 & 0.02 \\
+    &  &  &  & 20.2 & 5 & 81 & 0.08 \\
+    &  &  &  & 20.2 & 10 & 161 & 0.16 \\
+   \multirow{3}{*}{AESrkgcyclic} & \multirow{3}{*}{24} & \multirow{3}{*}{24.4} & \multirow{3}{*}{23.4} & 37.4 & 1 & 421 & 0.61 \\
+    &  &  &  & 32.4 & 5 & 13881 & 18.84 \\
+    &  &  &  & 30.4 & 10 & 28414 & 38.14 \\
+   \multirow{3}{*}{BLAKE256Digest-processBlock-160-230} & \multirow{3}{*}{21} & \multirow{3}{*}{57.4} & \multirow{3}{*}{58.4} & 32.4 & 1 & 10905 & 12.11 \\
+    &  &  &  & 22.4 & 5 & 58291 & 64.11 \\
+    &  &  &  & 31.4 & 10 & 175161 & 194.06 \\
+   \multirow{2}{*}{BLAKE256Digest-processBlock-189-1577} & \multirow{2}{*}{308} & \multirow{2}{*}{414.9} & \multirow{2}{*}{128.7} & 110.9 & 1 & 6244 & 241.63 \\
+    &  &  &  & 97.9 & 5 & 31204 & 1236.87 \\
+   \multirow{3}{*}{ContrastFilter-filter-13-252} & \multirow{3}{*}{47} & \multirow{3}{*}{72.0} & \multirow{3}{*}{67.7} & 50.8 & 1 & 4251 & 9.49 \\
+   &  &  &  & 37.7 & 5 & 24622 & 54.00 \\
+    &  &  &  & 33.2 & 10 & 101821 & 218.61 \\
+   \multirow{1}{*}{ECOH256Digest-AES2RoundsAll-2-666} & \multirow{1}{*}{179} & \multirow{1}{*}{262.3} & \multirow{1}{*}{174.4} & 58.1 & 1 & 175567 & 2733.60 \\
   \end{tabular}\\
   The table above compares the results of simple ASAP / ALAP-Schedules with the results of the implemented simulated annealing algorithm.
  

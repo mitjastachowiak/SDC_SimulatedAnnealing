@@ -142,7 +142,9 @@
     &  &  &  & 33.2 & 10 & 101821 & 218.61 \\ \arrayrulecolor{gray}\hline
    \multirow{1}{*}{ECOH256Digest-AES2RoundsAll-2-666} & \multirow{1}{*}{179} & \multirow{1}{*}{262.3} & \multirow{1}{*}{174.4} & 58.1 & 1 & 175567 & 2733.60 \\
   \end{tabular}\\ \\
-  The table above compares the results of simple ASAP / ALAP-Schedules with the results of the implemented simulated annealing algorithm.
+  The table above compares the results of simple ASAP / ALAP-Schedules with the results of the implemented simulated annealing algorithm. Not all available datasets were computed due to long computation times. For some examples, the temperature converged extremely slow.\\
+  It can be seen, that the SA-approach decreases the cost of large schedules, while the benefit for small schedules is comparatively low or in some cases even worse than the result of ASAP or ALAP.\\
+  The result of ADPCMn-decode-559-59 shows an other anomaly: The result of quality 5 is better, than the result of quality 10, while the runtime of quality 10 is lower. This may be triggered by the initial random configuration, which is non-deterministic in the regarded implementation.
  
 
 

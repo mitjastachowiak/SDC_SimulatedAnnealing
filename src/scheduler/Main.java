@@ -36,11 +36,14 @@ public class Main {
 		Graph g = dr.parse(args[0]);
 		double asapCost, alapCost, sasdcCost;
 
+		int i = args[0].lastIndexOf("/");
+		if (i == -1) // fck windwos
+			i = args[0].lastIndexOf("\\");
+		String fn = args[0].substring(i + 1);
+
 		Scheduler s = new ASAP();
 		Schedule sched = s.schedule(g);
 		System.out.printf("Cost (ASAP) = %s%n", asapCost = sched.cost());
-		String fn = args[0].substring(args[0].lastIndexOf("/") + 1);
-
 		sched.draw("schedules/ASAP_" + fn);
 
 		s = new ALAP();
@@ -58,8 +61,8 @@ public class Main {
 			boolean heading = !file.exists();
 			FileWriter wtr = new FileWriter("benchmark.csv", true);
 			if (heading)
-				wtr.write(String.format("%s;%s;%s;%s;%s;%s;%s%n", "File", "# Nodes", "ASAP", "ALAP", "SA/SDC", "Quality", "# iterations", "Runtime"));
-			wtr.write(String.format("%s;%f;%f;%f;%s;%.0f;%.2f%n", fn, g.size(), asapCost, alapCost, sasdcCost, quality, sasdc.iterations, sasdc.elapsedTime));
+				wtr.write(String.format("%s;%s;%s;%s;%s;%s;%s;%s%n", "File", "# Nodes", "ASAP", "ALAP", "SA/SDC", "Quality", "# iterations", "Runtime"));
+			wtr.write(String.format("%s;%s;%.2f;%.2f;%.2f;%s;%.0f;%.2f%n", fn, g.size(), asapCost, alapCost, sasdcCost, quality, sasdc.iterations, sasdc.elapsedTime));
 			wtr.close();
 		} catch (IOException e) {
 			e.printStackTrace();

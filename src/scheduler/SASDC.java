@@ -75,7 +75,7 @@ public class SASDC extends Scheduler {
 		double T = 20 * stdDeviation(cost), // initial temperature
 				tu = .5, // temperature update factor
 				ar = 1, // acceptance ratio
-				changes = 1, // total changes
+				ccost = cost[cost.length - 1], changes = 1, // total changes
 				acceptedChanges = 1; // accepted Changes
 
 		int inner = (int) Math.ceil(this.quality * Math.pow(nodes.length, 4.0 / 3)), maxzc = (int) Math.ceil(inner / 10);
@@ -87,13 +87,15 @@ public class SASDC extends Scheduler {
 			for (int i = 0; i < inner; i++) {
 				changes++;
 				Schedule temp = modify(nodes, lp);
-				double dc = temp.cost() - current.cost();
+				double tcost = temp.cost();
+				double dc = tcost - ccost;
 				double r = Math.random();
 				if (dc == 0)
 					zeroChange++;
 				if (r < Math.exp(-dc / T) && zeroChange <= maxzc) {
 					current = temp;
 					acceptedChanges++;
+					ccost = tcost;
 				} else
 					nodes.revert();
 			}
@@ -114,7 +116,7 @@ public class SASDC extends Scheduler {
 
 		elapsedTime = time = (System.nanoTime() - time) / 1e9;
 		iterations = changes;
-		System.out.printf("Convergence after %.0f iterations in %.1fsec (cost: %.2f).%n", changes, time, current.cost());
+		System.out.printf("Convergence after %.0f iterations in %.1fsec (cost: %.2f).%n", changes, time, ccost);
 
 		return current;
 	}

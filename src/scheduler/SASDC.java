@@ -13,7 +13,7 @@ import scpsolver.lpsolver.SolverFactory;
 import scpsolver.problems.LinearProgram;
 
 /**
- * Provides an SDC scheduler using interative optimization via simulated
+ * Provides an SDC scheduler using iterative optimization via simulated
  * annealing.
  * 
  * @author Mitja Stachowiak, Ludwig Meysel

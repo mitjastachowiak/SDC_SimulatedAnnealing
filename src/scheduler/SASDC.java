@@ -82,15 +82,9 @@ public class SASDC extends Scheduler {
 				changes++;
 				Schedule temp = modify(nodes, lp);
 				double dc = temp.cost() - current.cost();
-<<<<<<< HEAD
 				// if (dc == 0) {
 				// dc = 1e-4;// (double) -i / ;
 				// }
-=======
-				//if (dc == 0) {
-				//	dc = 1e-4;// (double) -i / ;
-				//}
->>>>>>> branch 'master' of https://github.com/mitjastachowiak/SDC_SimulatedAnnealing.git
 				double r = Math.random();
 				if (r < Math.exp(-dc / T)) {
 					current = temp;

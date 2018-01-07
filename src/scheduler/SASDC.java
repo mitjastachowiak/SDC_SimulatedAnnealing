@@ -3,6 +3,7 @@ package scheduler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import scheduler.sdcutil.SDCNodeList;
 import scpsolver.constraints.Constraint;
@@ -25,6 +26,9 @@ public class SASDC extends Scheduler {
 	private RC constraints;
 	private LinearProgramSolver lpSolver;
 	private int quality;
+	private Random random;
+
+	public double iterations, elapsedTime;
 
 	/**
 	 * Index of first resource constraint (for faster modification of the
@@ -38,6 +42,7 @@ public class SASDC extends Scheduler {
 		if (quality < 1 || quality > 10)
 			throw new IllegalArgumentException("Argument quality must be in range 0 <= quality <= 10");
 
+		random = new Random(45676415);
 		this.constraints = constraints;
 		this.quality = quality;
 		this.lpSolver = SolverFactory.newDefault();
@@ -73,20 +78,20 @@ public class SASDC extends Scheduler {
 				changes = 1, // total changes
 				acceptedChanges = 1; // accepted Changes
 
-		int inner = (int) Math.ceil(this.quality * Math.pow(nodes.length, 4.0 / 3));
+		int inner = (int) Math.ceil(this.quality * Math.pow(nodes.length, 4.0 / 3)), maxzc = (int) Math.ceil(inner / 10);
 
 		System.out.printf("SDC with SA: Running annealing with quality = %s and T0 = %.2f ...%n", quality, T);
 		double time = System.nanoTime();
 		while (ar > .12) {
+			int zeroChange = 0;
 			for (int i = 0; i < inner; i++) {
 				changes++;
 				Schedule temp = modify(nodes, lp);
 				double dc = temp.cost() - current.cost();
-				// if (dc == 0) {
-				// dc = 1e-4;// (double) -i / ;
-				// }
 				double r = Math.random();
-				if (r < Math.exp(-dc / T)) {
+				if (dc == 0)
+					zeroChange++;
+				if (r < Math.exp(-dc / T) && zeroChange <= maxzc) {
 					current = temp;
 					acceptedChanges++;
 				} else
@@ -107,7 +112,9 @@ public class SASDC extends Scheduler {
 			T *= tu;
 		}
 
-		System.out.printf("Convergence after %.0f iterations in %.1fsec (cost: %.2f).%n", changes, (System.nanoTime() - time) / 1e9, current.cost());
+		elapsedTime = time = (System.nanoTime() - time) / 1e9;
+		iterations = changes;
+		System.out.printf("Convergence after %.0f iterations in %.1fsec (cost: %.2f).%n", changes, time, current.cost());
 
 		return current;
 	}
@@ -154,14 +161,8 @@ public class SASDC extends Scheduler {
 	private Schedule modify(SDCNodeList nodes, LinearProgram lp) {
 		int i0 = Integer.MIN_VALUE;
 		do {
-			// if (i0 != Integer.MIN_VALUE)
-			// System.out.println("impossible");
-
-			i0 = (int) Math.round((2 * Math.random() - 1) * (nodes.length - 1));
-			// System.out.printf("Shove " + (i0 < 0 ? "left: " : "right: ") + "%1$-3s ",
-			// Math.abs(i0));
+			i0 = (int) Math.round((2 * random.nextDouble() - 1) * (nodes.length - 1));
 		} while (!(i0 < 0 ? nodes.shoveLeft(-i0) : nodes.shoveRight(i0)));
-		// System.out.println("ok " + nodes.toString());
 		return makeSchedule(nodes, lp);
 	}
 

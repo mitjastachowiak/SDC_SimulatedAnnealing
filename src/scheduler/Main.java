@@ -1,5 +1,9 @@
 package scheduler;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -30,21 +34,35 @@ public class Main {
 			System.out.println();
 		}
 		Graph g = dr.parse(args[0]);
+		double asapCost, alapCost, sasdcCost;
 
 		Scheduler s = new ASAP();
 		Schedule sched = s.schedule(g);
-		System.out.printf("Cost (ASAP) = %s%n", sched.cost());
+		System.out.printf("Cost (ASAP) = %s%n", asapCost = sched.cost());
+		String fn = args[0].substring(args[0].lastIndexOf("/") + 1);
 
-		sched.draw("schedules/ASAP_" + args[0].substring(args[0].lastIndexOf("/") + 1));
+		sched.draw("schedules/ASAP_" + fn);
 
 		s = new ALAP();
 		sched = s.schedule(g);
-		System.out.printf("Cost (ALAP) = %s%n", sched.cost());
-		sched.draw("schedules/ALAP_" + args[0].substring(args[0].lastIndexOf("/") + 1));
+		System.out.printf("Cost (ALAP) = %s%n", alapCost = sched.cost());
+		sched.draw("schedules/ALAP_" + fn);
 
-		s = new SASDC(rc, quality);
-		sched = s.schedule(g);
-		System.out.printf("Cost (SA/SDC) = %s%n", sched.cost());
-		sched.draw("schedules/SASDC_" + args[0].substring(args[0].lastIndexOf("/") + 1));
+		SASDC sasdc = new SASDC(rc, quality);
+		sched = sasdc.schedule(g);
+		System.out.printf("Cost (SA/SDC) = %s%n", sasdcCost = sched.cost());
+		sched.draw("schedules/SASDC_" + fn);
+
+		File file = new File("benchmark.csv");
+		try {
+			boolean heading = !file.exists();
+			FileWriter wtr = new FileWriter("benchmark.csv", true);
+			if (heading)
+				wtr.write(String.format("%s;%s;%s;%s;%s;%s;%s%n", "File", "# Nodes", "ASAP", "ALAP", "SA/SDC", "Quality", "# iterations", "Runtime"));
+			wtr.write(String.format("%s;%f;%f;%f;%s;%.0f;%.2f%n", fn, g.size(), asapCost, alapCost, sasdcCost, quality, sasdc.iterations, sasdc.elapsedTime));
+			wtr.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

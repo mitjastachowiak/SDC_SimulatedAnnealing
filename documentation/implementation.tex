@@ -13,12 +13,22 @@ To get better results, the list must be reordered somehow, but it must not do "w
 	\label{fig:lecturegraph}
 \end{figure}
 
-The initial order of the node list (due to the hierarchical depth) could be \#1, \#2, \#4, \#7, \#8, \#3, \#6, \#10, \#11, \#5, \#9. Node \#3 e.g. is a data flow dependency of \#1, \#2, \#5 and \#9. Exactly these dependencies must be considered when \#3 is moved in the list. To be more precise, each predecessor of \#3 must always be left of \#3 and each successor must always be to the right. This restricts the degree of flexibility when modifying the list.\par
-To make modification easy, the \code{SDCNodeList} provides two methods \code{shoveRight} and \code{shoveLeft}, which do the following:
+The initial order of the node list (due to the hierarchical depth) could be \#1, \#2, \#4, \#7, \#8, \#3, \#6, \#10, \#11, \#5, \#9. Node \#3 e.g. is a data flow dependency of \#1, \#2, \#5 and \#9. Exactly these dependencies must be considered when \#3 is moved in the list. To be more precise, each predecessor of \#3 must always be left of \#3 and each successor must always be to the right. This restricts the degree of flexibility when modifying the list.\\
+To make modification easy, the \code{SDCNodeList} provides two methods \code{shoveRight} and \code{shoveLeft}, which do the following:\\
 
-%
-% BITTE PSEUDOCODE DRAUS MACHEN (KANNS BEI MIR NICHT TESTEN)
-%
+\fbox{\parbox{0.9\linewidth}{
+  // nodes is a class-member\\
+  shoveCount: int\\
+  for(int i := i0+1; i < nodes.length; i++) \{\\
+  \phantom{}~~// find first non-flow-dependend-node\\
+  \phantom{}~~if (nodes[i] isNoSuccessorOf nodes[i0]) \{\\
+  \phantom{}~~~~shoveCount = i - i0;\\
+  \phantom{}~~~~break;\\
+  \phantom{}~~\}\\
+  \}\\
+  // move items  [i0 ... i0 + shoveCount] one array i0 to the right\\
+  // set original item from list[i0] = list[i0 + shoveCount]\\
+}}\\ \\
 shoveRight(i0: int):
 	// nodes is a class-member
 	shoveCount: int

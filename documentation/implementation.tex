@@ -1,4 +1,4 @@
-# Details on implementation
+\chapter{Details on implementation}
 
 The SDC scheduler with simulated annealing is implemented in the \code{SASDC}-class. The constructor takes the resource constraints and the scheduling quality as parameters. The quality is forwarded to the inner-loop-criterion, which is explained in chapter 3.\par
 The actual implementation of the SA algorithm is straight forward, therefore the real point of interest is how the configuration for a schedule is created and how it can be modified with having the option to revert the modification. This is done with a helper class \code{SDCNodeList} (for the sake of simplicity furthermore just called "node list").\par
@@ -11,7 +11,7 @@ To get better results, the list must be reordered somehow, but it must not do "w
 	\label{fig:lecturegraph}
 \end{figure}
 
-The initial order of the node list (due to the hierarchical depth) could be #1, #2, #4, #7, #8, #3, #6, #10, #11, #5, #9. Node #3 e.g. is a data flow dependency of #1, #2, #5 and #9. Exactly these dependencies must be considered when #3 is moved in the list. To be more precise, each predecessor of #3 must always be left of #3 and each successor must always be to the right. This restricts the degree of flexibility when modifying the list.\\
+The initial order of the node list (due to the hierarchical depth) could be \#1, \#2, \#4, \#7, \#8, \#3, \#6, \#10, \#11, \#5, \#9. Node \#3 e.g. is a data flow dependency of \#1, \#2, \#5 and \#9. Exactly these dependencies must be considered when \#3 is moved in the list. To be more precise, each predecessor of \#3 must always be left of \#3 and each successor must always be to the right. This restricts the degree of flexibility when modifying the list.\\
 To make modification easy, the \code{SDCNodeList} provides two methods \code{shoveRight} and \code{shoveLeft}, which do the following:
 
 %
@@ -29,6 +29,6 @@ shoveRight(i0: int):
 	// move items  [i0 ... i0 + shoveCount] one array i0 to the right
 	// set original item from list[i0] = list[i0 + shoveCount]
 
-This is a generic example and works in almost the same manner for shoveLeft. Basically the shove-functions find the first non-dependend predecessor/successor node beginning searching at \code{i0}. The initial ordering in the example before ended with the nodes #11, #5, #9. When shoving #9 to the left, the first node which would be checked to be predecessor is #5. Next iteration, #11 fulfils the \textit{isNoPredecessor}-criterion, therefore the \code{shoveCount} would be set to 2 and the loop cancels. Now the elements would be reordered to #5, #9, #11.\par
+This is a generic example and works in almost the same manner for shoveLeft. Basically the shove-functions find the first non-dependend predecessor/successor node beginning searching at \code{i0}. The initial ordering in the example before ended with the nodes \#11, \#5, \#9. When shoving \#9 to the left, the first node which would be checked to be predecessor is \#5. Next iteration, \#11 fulfils the \textit{isNoPredecessor}-criterion, therefore the \code{shoveCount} would be set to 2 and the loop cancels. Now the elements would be reordered to \#5, \#9, \#11.\par
 By storing the \code{i0} and \code{shoveCount}, the operation can easily be reverted if the change is not accepted the SA algorithm.
 	

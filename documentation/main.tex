@@ -35,10 +35,8 @@
   
   
   
-  \chapter{Resources and Constraints}
-  The constraints consist of data flow - and resource constraints. The data flow constraints determine, that no operation must start, before all predecessors have obtained a result. The resource constraints prevent, that the same resource is used twice at the same time.
-  
-  \section{Resources}
+  \chapter{Resources}
+  The constraints consist of data flow - and resource constraints. The data flow constraints determine, that no operation must start, before all predecessors have obtained a result. The resource constraints prevent, that the same resource is used twice at the same time.\\
   Each hardware has a certain amount of resources and resource types. There is a fixed list of operations given in the framework:\\
   \begin{tabular}{ c | r | r }
   	Operation name (ar) & delay & weight \\
@@ -58,12 +56,6 @@
   Each resource type can support multiple operations. For this project, the resource(types) are assumed to be overlap-free:
   $$\neg \exists R_1, R_2 \in Resources; Op_1, Op_2 \in Operations : Op_1 \in R_1 \land Op_1 \in R_2 \land Op_2 \in R_1 \land Op_2 \notin R_2$$
   Each resource can handle one operation within a certain time (delay). Multiple resources of the same type may exist.
-  
-  \section{Data Flow Constraints}
-  The data flow constraints are fixed and only need to be computed once. \\
-  
-  \section{Resource Constraints}
-  The data flow constraints are fixed and only need to be computed once. \\
   
 
 
@@ -99,6 +91,9 @@
   	\end{tabular}
     \item \emph{Inner Loop Criterion} determines, how many changes are tested for the same temperature. Each change usually moves one node in the ordering of constraint-equations. The larger the number of nodes becomes, the more often each node should be moved, so the number of iterations should depend on the node count. Further more, there is a quality factor $\in [1 .. 10]$ for the algorithm, which can be passed via the third program argument. The formula $n_{inner} = \left\lceil quality * n_{nodes}^{4/3} \right\rceil$ is known to yield a result, thats quality belongs to the given quality.
   \end{itemize}
+
+
+  \include{implementation}
 
 
   \chapter{Evaluation}

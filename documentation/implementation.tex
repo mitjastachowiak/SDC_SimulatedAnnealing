@@ -1,8 +1,10 @@
 \chapter{Details on implementation}
 
 The SDC scheduler with simulated annealing is implemented in the \code{SASDC}-class. The constructor takes the resource constraints and the scheduling quality as parameters. The quality is forwarded to the inner-loop-criterion, which is explained in chapter 3.\par
-The actual implementation of the SA algorithm is straight forward, therefore the real point of interest is how the configuration for a schedule is created and how it can be modified with having the option to revert the modification. This is done with a helper class \code{SDCNodeList} (for the sake of simplicity furthermore just called "node list").\par
-The node list basically takes the the graph to schedule as constructor parameter. Then it initializes a corresponding \code{Node}-array with a length equals to the number of nodes in the graph. The original \code{Node}-class (from the high-level-framework) has got a new parameter \code{depth}, which is the hierarchical depth of each node (i.e. root-nodes have depth=0, their predecessors have depth=1 and so on). The \code{Node}-array will then be filled ordered by the corresponding depths. This leads to the initial node list which then can be modified in order to optimize the results.\par
+
+\section{The node list}
+The actual implementation of the SA algorithm is straight forward, therefore the real point of interest is how the configuration for a schedule is created and how it can be modified with having the option to revert the modification. This is done with a helper class \code{SDCNodeList} (for the sake of simplicity furthermore just called "node list"). The node list orders and allows reordering of the nodes, considering some requirements which are explained later. This is the base of the SDC scheduling appoach. The (mathematical) resource constraints for the linear program are created from this list where the order of the list is the elementary part of the SA/SDC scheduling approach.\par
+The node list basically takes the the graph to schedule as constructor parameter. Then it initializes a corresponding \code{Node}-array with a length equals to the number of nodes in the graph. The original \code{Node}-class (from the high-level-framework) has got a new member \code{depth}, which is the hierarchical depth of each node (i.e. root-nodes have depth=0, their predecessors have depth=1 and so on). The \code{Node}-array will then be filled ordered by the corresponding depths. This leads to the initial node list which then can be modified in order to optimize the results.\par
 To get better results, the list must be reordered somehow, but it must not do "wild swapping" of nodes - the reordering is restricted by the data flow dependencies. To clear this up a bit, figure~\ref{fig:lecturegraph} shows the example graph from the lecture.
 \begin{figure}
 	\centering
@@ -11,7 +13,7 @@ To get better results, the list must be reordered somehow, but it must not do "w
 	\label{fig:lecturegraph}
 \end{figure}
 
-The initial order of the node list (due to the hierarchical depth) could be \#1, \#2, \#4, \#7, \#8, \#3, \#6, \#10, \#11, \#5, \#9. Node \#3 e.g. is a data flow dependency of \#1, \#2, \#5 and \#9. Exactly these dependencies must be considered when \#3 is moved in the list. To be more precise, each predecessor of \#3 must always be left of \#3 and each successor must always be to the right. This restricts the degree of flexibility when modifying the list.\\
+The initial order of the node list (due to the hierarchical depth) could be \#1, \#2, \#4, \#7, \#8, \#3, \#6, \#10, \#11, \#5, \#9. Node \#3 e.g. is a data flow dependency of \#1, \#2, \#5 and \#9. Exactly these dependencies must be considered when \#3 is moved in the list. To be more precise, each predecessor of \#3 must always be left of \#3 and each successor must always be to the right. This restricts the degree of flexibility when modifying the list.\par
 To make modification easy, the \code{SDCNodeList} provides two methods \code{shoveRight} and \code{shoveLeft}, which do the following:
 
 %
@@ -22,13 +24,25 @@ shoveRight(i0: int):
 	shoveCount: int
 	for(int i := i0+1; i < nodes.length; i++)
 		// find first non-flow-dependend-node
-		if (nodes[i] isNoSuccessorOf nodes[i0])
+		if (nodes[i] isNotSuccessorOf nodes[i0])
 			shoveCount = i - i0;
 			break;
 
 	// move items  [i0 ... i0 + shoveCount] one array i0 to the right
 	// set original item from list[i0] = list[i0 + shoveCount]
 
-This is a generic example and works in almost the same manner for shoveLeft. Basically the shove-functions find the first non-dependend predecessor/successor node beginning searching at \code{i0}. The initial ordering in the example before ended with the nodes \#11, \#5, \#9. When shoving \#9 to the left, the first node which would be checked to be predecessor is \#5. Next iteration, \#11 fulfils the \textit{isNoPredecessor}-criterion, therefore the \code{shoveCount} would be set to 2 and the loop cancels. Now the elements would be reordered to \#5, \#9, \#11.\par
-By storing the \code{i0} and \code{shoveCount}, the operation can easily be reverted if the change is not accepted the SA algorithm.
-	
+This is a generic example and works in almost the same manner for shoveLeft. Basically the shove-functions find the first non-dependend predecessor/successor node beginning searching at \code{i0}. The initial ordering in the example before ended with the nodes \#11, \#5, \#9. When shoving \#9 to the left, the first node which would be checked to be predecessor is \#5. Next iteration, \#11 fulfils the \textit{isNotPredecessor}-criterion, therefore the \code{shoveCount} would be set to 2 and the loop cancels. Now the elements would be reordered to \#5, \#9, \#11. Long story short, when left-shoving \#9, \#5 must also be shoved, to stay before \#9.\par
+By storing the \code{i0} and \code{shoveCount}, the operation can easily be reverted if the change is not accepted the SA algorithm.\par
+
+\section{The \class{SASDC}-scheduler}
+After having a node list with valid ordering the scheduler can use this list to create a linear program which can be solved by the lpsolve library (as part of the SCPSOlver library). From the min-solution of the linear program the schedule can be created which then can be used from the SA algorithm (in order to compare the costs of the current and the modified schedule).\par
+The outline of the whole SA/SDC scheduling then is as following:
+\begin{itemize}
+	\item{Create node list (which will immediatly provide the base for the resource constraints)}
+	\item{For $N$ Nodes, perform $N$ random modifications on the node list in order to find a reasonable start temperature}
+	\item{Use the $N$-times modified node list as initial schedule for the SA algorithm}
+\end{itemize}
+
+The modification of the node list is very simple: A random number $r \in [0..1]$ and from it results the shove-operation: $s = round((2r-1)*(N-1)), |s| \in [1, N-1]$. $\sign(s)$ is the direction ($s<0$ means shoving left, $s>=0$ means shoving right) and $|s|$ is the index in the node list, which node should be shoved. The \code{shove}-methods return a flag indicating whether the shove was possible or not - if it was not possible, another random shove is tried, until it worked. The first and last nodes are not considered, because of the 50\% likelihood that a shove would not be possible (e.g. the first element never be shoved left).\par
+Another method \code{makeSchedule} does the whole work of creating the linear program from the node list, solve it and then create and return a schedule.\par
+Now everything is prepared for running the SA algorithm. Another word on the linear program: It is not necessary to re-create a new \code{LinearProgram}-object for each schedule: The linear program can be created initially with the data flow constraints and can then be reused. When modifying the node list, only the "old" resource constraints in the linear program must be removed and be replaced by the new ones. This probably gives little performance gain.

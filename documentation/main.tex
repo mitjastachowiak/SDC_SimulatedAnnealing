@@ -144,7 +144,20 @@
   \end{tabular}\\ \\
   The table above compares the results of simple ASAP / ALAP-Schedules with the results of the implemented simulated annealing algorithm. Not all available datasets were computed due to long computation times. For some examples, the temperature converged extremely slow.\\
   It can be seen, that the SA-approach decreases the cost of large schedules, while the benefit for small schedules is comparatively low or in some cases even worse than the result of ASAP or ALAP.\\
-  The result of ADPCMn-decode-559-59 shows an other anomaly: The result of quality 5 is better, than the result of quality 10, while the runtime of quality 10 is lower. This may be triggered by the initial random configuration, which is non-deterministic in the regarded implementation.
+  The results of ADPCMn-decode-559-599 (9 nodes) or BLAKE256Digest-processBlock-160-230 (21 nodes) show an other anomaly: The result of quality 5 is better, than the result of quality 10, while the runtime of quality 10 is lower. This may be triggered by the initial random configuration, which is non-deterministic in the regarded implementation.
+  \begin{figure}
+  	\centering
+  	\includegraphics[width=0.7\textwidth]{cost_compare.pdf}
+  	\caption{Comparison of cost}
+  	\label{fig:costcompare}
+  \end{figure}
+  \begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{runtime_compare.pdf}
+	\caption{Comparison of runtime}
+	\label{fig:runtimecompare}
+  \end{figure}
+  
  
 
 

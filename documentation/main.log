@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.1.6)  8 JAN 2018 01:49
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.1.6)  8 JAN 2018 02:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -772,8 +772,7 @@ Package: array 2016/10/06 v2.4d Tabular extension package (FMi)
 )
 \everycr=\toks34
 \minrowclearance=\skip124
-) (./main.aux
-(./implementation.aux))
+) (./main.aux)
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 30.
@@ -1078,75 +1077,67 @@ File: ts15ch.fd 2009/08/06 Fontinst v1.927 font definitions for TS1/5ch.
 ) [3
 
 ]
-\openout2 = `implementation.aux'.
-
-
-(./implementation.tex
 chapter 4.
-LaTeX Font Info:    Try loading font information for T1+txtt on input line 3.
+LaTeX Font Info:    Try loading font information for T1+txtt on input line 98.
 (/usr/share/texlive/texmf-dist/tex/latex/txfonts/t1txtt.fd
 File: t1txtt.fd 2000/12/15 v3.1
 )
 <./img/lecturegraph.png, id=34, 301.8778pt x 209.28188pt>
 File: ./img/lecturegraph.png Graphic file (type png)
 <use ./img/lecturegraph.png>
-Package pdftex.def Info: ./img/lecturegraph.png  used on input line 11. on inpu
-t line 11.
+Package pdftex.def Info: ./img/lecturegraph.png  used on input line 106. on inp
+ut line 106.
 Package pdftex.def Info: Requested size: 301.87706pt x 209.28134pt on input lin
-e 11.
+e 106.
 
-
-LaTeX Warning: Citation `Hochberger2017' on page 4 undefined on input line 12.
-
-
-LaTeX Warning: Citation `Hochberger2017' on page 4 undefined on input line 12.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 16--18
+Underfull \hbox (badness 10000) in paragraph at lines 111--113
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 31--31
+Underfull \hbox (badness 10000) in paragraph at lines 126--126
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 31--40
+Underfull \hbox (badness 10000) in paragraph at lines 126--127
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 126--127
 
  []
 
 [4
 
-
 ]
 
 LaTeX Font Warning: Font shape `T1/txtt/mb/n' undefined
-(Font)              using `T1/txtt/m/n' instead on input line 47.
+(Font)              using `T1/txtt/m/n' instead on input line 131.
 
-[5 <./img/lecturegraph.png>]) [6]
+[5 <./img/lecturegraph.png>] [6]
 chapter 5.
-<./img/cost_compare.pdf, id=47, pagebox=cropbox, 449.57965pt x 255.95625pt>
+<./img/cost_compare.pdf, id=46, pagebox=cropbox, 449.57965pt x 255.95625pt>
 File: ./img/cost_compare.pdf Graphic file (type pdf)
 <use ./img/cost_compare.pdf>
-Package pdftex.def Info: ./img/cost_compare.pdf  used on input line 150. on inp
-ut line 150.
-Package pdftex.def Info: Requested size: 348.54475pt x 198.43823pt on input lin
-e 150.
-<./img/runtime_compare.pdf, id=48, pagebox=cropbox, 366.18132pt x 235.53004pt>
+Package pdftex.def Info: ./img/cost_compare.pdf  used on input line 196. on inp
+ut line 196.
+Package pdftex.def Info: Requested size: 398.3401pt x 226.78879pt on input line
+ 196.
+<./img/runtime_compare.pdf, id=47, pagebox=cropbox, 366.18132pt x 235.53004pt>
 File: ./img/runtime_compare.pdf Graphic file (type pdf)
 <use ./img/runtime_compare.pdf>
-Package pdftex.def Info: ./img/runtime_compare.pdf  used on input line 156. on 
-input line 156.
-Package pdftex.def Info: Requested size: 248.96162pt x 160.13673pt on input lin
-e 156.
+Package pdftex.def Info: ./img/runtime_compare.pdf  used on input line 202. on 
+input line 202.
+Package pdftex.def Info: Requested size: 288.79639pt x 185.7648pt on input line
+ 202.
 
-Underfull \hbox (badness 10000) in paragraph at lines 101--160
+Underfull \hbox (badness 10000) in paragraph at lines 147--206
 
  []
 
 [7
-
 
 ] [8 <./img/cost_compare.pdf> <./img/runtime_compare.pdf
 
@@ -1154,42 +1145,47 @@ pdfTeX warning: /usr/bin/pdflatex (file ./img/runtime_compare.pdf): PDF inclusi
 on: multiple pdfs with page group included in a single page
 >]
 chapter 6.
-[9
 
-] (./main.aux (./implementation.aux))
+Underfull \hbox (badness 2158) in paragraph at lines 216--217
+[]\T1/5ch/m/n/11 To re-spect the "sub-order" in the node list when shov-ing, th
+e node list per-forms the
+ []
+
+(./main.bbl [9
+
+]) [10
+
+] (./main.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-
-LaTeX Warning: There were undefined references.
-
  ) 
 Here is how much of TeX's memory you used:
- 11368 strings out of 492990
- 178637 string characters out of 6135006
- 363882 words of memory out of 5000000
- 14608 multiletter control sequences out of 15000+600000
- 90251 words of font info for 85 fonts, out of 8000000 for 9000
+ 11361 strings out of 492990
+ 178475 string characters out of 6135006
+ 363477 words of memory out of 5000000
+ 14607 multiletter control sequences out of 15000+600000
+ 86643 words of font info for 83 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  59i,13n,100p,8843b,460s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texliv
-e/texmf-dist/fonts/enc/dvips/ly1/texnansi.enc}</usr/share/texmf/fonts/type1/sof
-tmake/charter/5chb8a.pfb></usr/share/texmf/fonts/type1/softmake/charter/5chr8a.
-pfb></usr/share/texmf/fonts/type1/softmake/charter/5chri8a.pfb></usr/share/texm
-f/fonts/type1/softmake/frontpage/5fpm8a.pfb></usr/share/texmf/fonts/type1/softm
-ake/frontpage/5fpr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/bitstrea/ch
-arter/bchr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/bitstrea/charter/bc
-hri8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathdesign/mdbch/md
--chr7m.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathdesign/mdbch/m
-d-chr7t.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathdesign/mdbch/
-md-chr7v.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathdesign/mdbch
-/md-chr7y.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathdesign/mdbc
-h/md-chri7m.pfb></usr/share/texlive/texmf-dist/fonts/type1/adobe/utopia/putri8a
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb>
-Output written on main.pdf (10 pages, 165696 bytes).
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/ly1/texnansi.enc}{/usr/share/t
+exlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texmf/fonts/type1/sof
+tmake/charter/5chr8a.pfb></usr/share/texmf/fonts/type1/softmake/charter/5chri8a
+.pfb></usr/share/texmf/fonts/type1/softmake/frontpage/5fpm8a.pfb></usr/share/te
+xmf/fonts/type1/softmake/frontpage/5fpr8a.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/bitstrea/charter/bchr8a.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/bitstrea/charter/bchri8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/mathdesign/mdbch/md-chr7m.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/mathdesign/mdbch/md-chr7t.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
+lic/mathdesign/mdbch/md-chr7v.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/mathdesign/mdbch/md-chr7y.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/mathdesign/mdbch/md-chri7m.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/adobe/utopia/putri8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txf
+onts/t1xtt.pfb>
+Output written on main.pdf (11 pages, 167736 bytes).
 PDF statistics:
- 126 PDF objects out of 1000 (max. 8388607)
- 87 compressed objects within 1 object stream
+ 125 PDF objects out of 1000 (max. 8388607)
+ 86 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  33 words of extra memory for PDF output out of 10000 (max. 10000000)
 

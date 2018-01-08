@@ -1,9 +1,0 @@
-First things first: It is difficult to decide whether the results are good or at least reasonable. The main problem here is that we have no other results for comparison, neither for an "acceptable" runtime nor for the minimum cost for larger graphs in relation to the ALAP and ASAP results.
-
-In order to optimize the scheduler (in terms of runtime), there one should consider three main bottlenecks:
-\begin{itemize}
-	\item{To respect the "sub-order" in the node list when shoving, the node list performs the predecessor/sucessor-checking over and over again. These recursive calls are currently implemented as recursive DFS, which might be expesive on huge graphs. On figure~\ref{fig:lecturegraph} a DFS upwards from \#3 would search the whole subtree before \#1, even if it might just check against \#2. Flow dependend nodes are always ordered by their hierarchical depth, and therefore immediate successors/predecessors are also the first occurences which can be found when shoving. Therefore a BFS might be more suitable.}
-	\item{The next bottleneck is the permanent re-checking of the predecessors/sucessors itself. It would be very helpful to find some kind of code, which makes this check much faster. The most intimating solution would be to store all successors of a node, not only the immediate ones, which obviously would raise the memory-usage significantly. Better would be some kind of numeric encoding.}
-	\item{Another challenge is the optimizion of the SA itself: It is possible to often get the same solution which is sometimes accept it, sometimes not. Probably it is reasonable to somehow store the already generated nodelists (e.g. as hash) and restrict the usage of them: this would reduce the number of recaluclations (esp. lp_solve-calls)}
-\end{itemize}
-

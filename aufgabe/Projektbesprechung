@@ -1,0 +1,9 @@
+Keine Überlappenden Ressourcen
+Wichtig: Inner cycle factor | initial temperature
+Operationen können verschiedene Taktlängen haben
+Es wird zwischen Resource- und data flow constraints unterschieden
+Shoves brauchen wir nicht, wir tauschen in der Prioritätsreinhenfolge
+SDC-Solver mappt gemäß Prioritäten und Constraints auf die Hardware
+SDC-Solver ist in einem Link gegeben und kann in Framework integriert werden
+Es ist Ziel alle Beispiele im Framework zu testen (es gönnen ggf. große Laufzeiten auftreten)
+Prioritäten am Anfang zufällig - aber deterministisch, im gegensatz zu salsa auch einfach zu machen

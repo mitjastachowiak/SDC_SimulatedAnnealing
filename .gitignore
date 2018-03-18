@@ -4,3 +4,4 @@
 .classpath
 *.aux
 *.log
+/documentation/
